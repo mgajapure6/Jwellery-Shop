@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- Root Context: defines shared resources visible to all other web components -->
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"></property>
+		<property name="username" value="onlinestore"></property>
+		<property name="password" value="mayur"></property>
+	</bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+		<property name="annotatedClasses">
+			<list>
+				<value>com.shop.jwellery.beans.Product</value>
+				<value>com.shop.jwellery.beans.Customer</value>
+				<value>com.shop.jwellery.beans.Address</value>
+				<value>com.shop.jwellery.beans.OrderData</value>
+				<value>com.shop.jwellery.beans.OrderDetail</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="productDao" class="com.shop.jwellery.dao.ProductDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="productService" class="com.shop.jwellery.service.ProductServiceImpl">
+		<property name="productDao" ref="productDao"></property>
+	</bean>
+	<bean id="signupDao" class="com.shop.jwellery.dao.SignupDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="signupService" class="com.shop.jwellery.service.SignupServiceImpl">
+		<property name="signupDao" ref="signupDao"></property>
+	</bean>
+	<bean id="loginDao" class="com.shop.jwellery.dao.LoginDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="loginService" class="com.shop.jwellery.service.LoginServiceImpl">
+		<property name="loginDao" ref="loginDao"></property>
+	</bean>
+	<bean id="AddressDao" class="com.shop.jwellery.dao.AddressDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="AddressService" class="com.shop.jwellery.service.AddressServiceImpl">
+		<property name="addressDao" ref="AddressDao"></property>
+	</bean>
+	<bean id="customerDao" class="com.shop.jwellery.dao.CustomerDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="CustomerService" class="com.shop.jwellery.service.CustomerServiceImpl">
+		<property name="customerDao" ref="customerDao"></property>
+	</bean>
+	
+	<bean id="saveorderDao" class="com.shop.jwellery.dao.SaveorderDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="saveorderService" class="com.shop.jwellery.service.SaveorderServiceImpl">
+		<property name="saveorderDao" ref="saveorderDao"></property>
+	</bean>
+</beans>
